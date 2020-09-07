@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Customer } from './customer';
-import {FormGroup, FormControl, FormBuilder, Validators, ValidatorFn, AbstractControl} from '@angular/forms';
+import {FormGroup, FormControl, FormBuilder, Validators, ValidatorFn, AbstractControl, FormArray} from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
@@ -35,6 +35,9 @@ export class CustomerComponent implements OnInit {
   customer = new Customer();
   customerForm: FormGroup;
   emailMessage: string;
+  get addresses(): FormArray {
+    return this.customerForm.get('addresses') as FormArray;
+  }
   private validationMessages = {
     required: 'Please enter your email address.',
     email: 'Please enter a valid email address.'
@@ -88,6 +91,10 @@ export class CustomerComponent implements OnInit {
     //   email : 'aziz@gmail.com',
     //   sendCatalog: false
     // });
+  }
+
+  addAddress(): void {
+    this.addresses.push(this.buildAddress());
   }
 
   buildAddress(): FormGroup {
